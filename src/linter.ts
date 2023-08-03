@@ -19,10 +19,14 @@ export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Pro
   const graphqlSchemaLinterPath = await findLibraryPath(document);
 
   if (graphqlSchemaLinterPath === null) {
-    throw new Error("graphql-schema-linter is not installed.");
+    throw new Error("@gopuff/graphql-schema-linter is not installed.");
   }
 
-  const cwd = path.join(graphqlSchemaLinterPath, "..", "..");
+  const pathsToBackOut = ["..", ".."];
+  if (graphqlSchemaLinterPath?.includes("test/workspace")) {
+    pathsToBackOut.push("..");
+  }
+  const cwd = path.join(graphqlSchemaLinterPath, ...pathsToBackOut);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { runner } = require(graphqlSchemaLinterPath);
   const stdout = createStdio();
@@ -36,7 +40,7 @@ export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Pro
   }
 
   if (exitCode !== 1) {
-    throw new Error(stderr.data || "graphql-schema-linter failed.");
+    throw new Error(stderr.data || "@gopuff/graphql-schema-linter failed.");
   }
 
   const errors: SchemaLinterError[] = JSON.parse(stdout.data).errors;
@@ -60,7 +64,7 @@ export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Pro
   return result;
 }
 
-// Find graphql-schema-linter library in node_modules
+// Find @gopuff/graphql-schema-linter library in node_modules
 async function findLibraryPath(document: vscode.TextDocument): Promise<string | null> {
   const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(document.fileName));
   if (!workspaceFolder) {
@@ -72,7 +76,7 @@ async function findLibraryPath(document: vscode.TextDocument): Promise<string | 
 
   while (currentPath !== rootPath) {
     currentPath = path.dirname(currentPath);
-    const libPath = path.join(currentPath, "node_modules", "graphql-schema-linter");
+    const libPath = path.join(currentPath, "node_modules", "@gopuff", "graphql-schema-linter");
     if (fs.existsSync(libPath)) {
       return libPath;
     }

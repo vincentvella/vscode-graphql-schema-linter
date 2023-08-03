@@ -2,7 +2,7 @@ import vscode from "vscode";
 import type { LintResult } from "./linter";
 import { runGraphqlSchemaLinter } from "./linter";
 
-const extensionName = "vscode-graphql-schema-linter";
+const extensionName = "vscode-graphql-schema-linter-gopuff";
 const DEBUG_MODE = process.env.DEBUG_MODE === "true";
 
 type Context = {

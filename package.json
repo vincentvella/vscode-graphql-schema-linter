@@ -1,21 +1,21 @@
 {
-  "name": "vscode-graphql-schema-linter",
-  "displayName": "Graphql Schema Linter",
-  "description": "GraphQL schema linter for VSCode",
-  "publisher": "hokaccha",
-  "author": "hokaccha",
+  "name": "vscode-graphql-schema-linter-gopuff",
+  "displayName": "Graphql Schema Linter for Gopuff",
+  "description": "GraphQL Schema Linter for Gopuff",
+  "publisher": "vincentvella",
+  "author": "vincentvella",
   "license": "MIT",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "engines": {
     "vscode": "^1.77.0"
   },
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hokaccha/vscode-graphql-schema-linter.git"
+    "url": "https://github.com/vincentvella/vscode-graphql-schema-linter.git"
   },
   "bugs": {
-    "url": "https://github.com/hokaccha/vscode-graphql-schema-linter/issues"
+    "url": "https://github.com/vincentvella/vscode-graphql-schema-linter/issues"
   },
   "categories": [
     "Linters"
@@ -27,7 +27,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-graphql-schema-linter.executeLint",
+        "command": "vscode-graphql-schema-linter-gopuff.executeLint",
         "title": "Execute lint for GraphQL Schema"
       }
     ]

@@ -1,6 +1,6 @@
-# Graphql Schema Linter for VSCode
+# Graphql Schema Linter for Gopuff
 
-This VSCode extension allows you to lint your GraphQL schema files using the [graphql-schema-linter](https://github.com/cjoudrey/graphql-schema-linter) library directly within the editor. The extension is activated when the graphql-schema-linter library is installed in your currently open workspace.
+This VSCode extension allows you to lint your GraphQL schema files using the [graphql-schema-linter](https://github.com/vincentvella/graphql-schema-linter) library directly within the editor. The extension is activated when the graphql-schema-linter library is installed in your currently open workspace.
 
 ![screenshot](assets/screenshot.png)
 
@@ -24,7 +24,7 @@ To use this extension, you must meet the following requirements:
 npm install --save-dev graphql-schema-linter
 ```
 
-- You must have the `schemaPaths` option configured in your graphql-schema-linter configuration file. This is necessary because the extension cannot determine whether a GraphQL file is a schema or a client query. See: https://github.com/cjoudrey/graphql-schema-linter#configuration-file
+- You must have the `schemaPaths` option configured in your graphql-schema-linter configuration file. This is necessary because the extension cannot determine whether a GraphQL file is a schema or a client query. See: https://github.com/vincentvella/graphql-schema-linter#configuration-file
 
 ## Usage
 
