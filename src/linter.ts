@@ -22,10 +22,7 @@ export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Pro
     throw new Error("@gopuff/graphql-schema-linter is not installed.");
   }
 
-  const pathsToBackOut = ["..", ".."];
-  if (graphqlSchemaLinterPath?.includes("test/workspace")) {
-    pathsToBackOut.push("..");
-  }
+  const pathsToBackOut = ["..", "..", ".."];
   const cwd = path.join(graphqlSchemaLinterPath, ...pathsToBackOut);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { runner } = require(graphqlSchemaLinterPath);
