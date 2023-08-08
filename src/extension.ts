@@ -33,7 +33,7 @@ export async function executeLint(document: vscode.TextDocument, context: Contex
   context.diagnosedFileUris = new Set();
 
   // Set diagnostics for files that are in the lintResult.
-  for (const [filePath, diagnostics] of lintResult) {
+  for (const [filePath, diagnostics] of lintResult || []) {
     const uri = vscode.Uri.file(filePath);
     context.diagnosedFileUris.add(uri);
     context.diagnosticCollection.set(uri, diagnostics);

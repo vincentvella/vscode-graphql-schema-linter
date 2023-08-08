@@ -1,5 +1,5 @@
 {
-  "dependencies": {
-    "@gopuff/graphql-schema-linter": "^1.0.0"
+  "devDependencies": {
+    "@gopuff/graphql-schema-linter": "^1.0.9"
   }
 }

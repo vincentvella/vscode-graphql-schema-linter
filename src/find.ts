@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import vscode from "vscode";
 import globalDirs from "global-dirs";
 import isPathInside from "is-path-inside";
+import vscode from "vscode";
 
 interface Installation {
   path: string;

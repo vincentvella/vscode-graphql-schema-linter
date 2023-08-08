@@ -68,6 +68,6 @@
   },
   "dependencies": {
     "global-dirs": "^3.0.1",
-    "is-path-inside": "^4.0.0"
+    "is-path-inside": "^3.0.3"
   }
 }

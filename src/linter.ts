@@ -14,7 +14,7 @@ type SchemaLinterError = {
 // Map<filePath, vscode.Diagnostic[]>
 export type LintResult = Map<string, vscode.Diagnostic[]>;
 
-export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Promise<LintResult> {
+export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Promise<LintResult | undefined> {
   const installation = await findInstallation(document);
   const installationPath = installation?.path ?? null;
 
@@ -22,13 +22,13 @@ export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Pro
     throw new Error("@gopuff/graphql-schema-linter is not installed.");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { runner } = require(installationPath);
+  const { runner } = await import(installationPath);
+
   const stdout = createStdio();
   const stderr = createStdio();
   const stdin = null;
 
-  const argv = ["node", "_", "--format", "json"];
+  const argv = ["node", "_", "--format", "json", "--installation-path", installationPath];
   const configDirectory = findWorkspaceFolder(document);
   if (configDirectory) {
     argv.push("--config-directory", configDirectory.uri.fsPath);

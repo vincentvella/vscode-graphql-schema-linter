@@ -1,4 +1,4 @@
-type Post {
+type Post @shareable {
   id: ID!
   title: String!
   # user: User
