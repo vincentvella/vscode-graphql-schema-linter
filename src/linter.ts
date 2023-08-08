@@ -1,6 +1,5 @@
-import fs from "fs";
-import path from "path";
 import vscode from "vscode";
+import { findInstallation, findWorkspaceFolder } from "./find";
 
 type SchemaLinterError = {
   message: string;
@@ -16,20 +15,24 @@ type SchemaLinterError = {
 export type LintResult = Map<string, vscode.Diagnostic[]>;
 
 export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Promise<LintResult> {
-  const graphqlSchemaLinterPath = await findLibraryPath(document);
+  const installation = await findInstallation(document);
+  const installationPath = installation?.path ?? null;
 
-  if (graphqlSchemaLinterPath === null) {
+  if (installationPath === null) {
     throw new Error("@gopuff/graphql-schema-linter is not installed.");
   }
 
-  const pathsToBackOut = ["..", "..", ".."];
-  const cwd = path.join(graphqlSchemaLinterPath, ...pathsToBackOut);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { runner } = require(graphqlSchemaLinterPath);
+  const { runner } = require(installationPath);
   const stdout = createStdio();
   const stderr = createStdio();
   const stdin = null;
-  const argv = ["node", "_", "--format", "json", "--config-directory", cwd];
+
+  const argv = ["node", "_", "--format", "json"];
+  const configDirectory = findWorkspaceFolder(document);
+  if (configDirectory) {
+    argv.push("--config-directory", configDirectory.uri.fsPath);
+  }
   const exitCode = await runner.run(stdout, stdin, stderr, argv);
 
   if (exitCode === 0) {
@@ -59,27 +62,6 @@ export async function runGraphqlSchemaLinter(document: vscode.TextDocument): Pro
   });
 
   return result;
-}
-
-// Find @gopuff/graphql-schema-linter library in node_modules
-async function findLibraryPath(document: vscode.TextDocument): Promise<string | null> {
-  const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(document.fileName));
-  if (!workspaceFolder) {
-    return null;
-  }
-
-  let currentPath = document.fileName;
-  const rootPath = workspaceFolder.uri.fsPath;
-
-  while (currentPath !== rootPath) {
-    currentPath = path.dirname(currentPath);
-    const libPath = path.join(currentPath, "node_modules", "@gopuff", "graphql-schema-linter");
-    if (fs.existsSync(libPath)) {
-      return libPath;
-    }
-  }
-
-  return null;
 }
 
 function createStdio() {
