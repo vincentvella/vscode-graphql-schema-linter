@@ -1,9 +1,11 @@
 import vscode from "vscode";
 import type { LintResult } from "./linter";
 import { runGraphqlSchemaLinter } from "./linter";
+import logger from "./logger";
 
 const extensionName = "vscode-graphql-schema-linter-gopuff";
 const DEBUG_MODE = process.env.DEBUG_MODE === "true";
+logger.info(`Activating ${extensionName}...`);
 
 type Context = {
   diagnosticCollection: vscode.DiagnosticCollection;
