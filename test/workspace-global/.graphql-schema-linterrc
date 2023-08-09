@@ -1,0 +1,9 @@
+{
+  "federation": true,
+  "schemaPaths": [
+    "./schema/*.graphqls"
+  ],
+  "rules": [
+    "defined-types-are-used"
+  ]
+}

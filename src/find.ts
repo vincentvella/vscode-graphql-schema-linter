@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import globalDirs from "global-dirs";
-import isPathInside from "is-path-inside";
 import vscode from "vscode";
 
 interface Installation {
@@ -32,17 +31,20 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
     }
   }
 
+  const yarnPath = path.join(globalDirs.yarn.packages, "@gopuff", "graphql-schema-linter");
+  const npmPath = path.join(globalDirs.npm.packages, "@gopuff", "graphql-schema-linter");
+
   // Check if the package is installed globally
-  if (isPathInside(__dirname, globalDirs.yarn.packages)) {
+  if (fs.existsSync(yarnPath)) {
     // package is installed with global yarn
     return {
-      path: path.join(globalDirs.yarn.packages, "@gopuff", "graphql-schema-linter"),
+      path: yarnPath,
       location: "global",
     };
-  } else if (isPathInside(__dirname, globalDirs.npm.packages)) {
+  } else if (fs.existsSync(npmPath)) {
     // package is installed with global npm
     return {
-      path: path.join(globalDirs.npm.packages, "@gopuff", "graphql-schema-linter"),
+      path: npmPath,
       location: "global",
     };
   }

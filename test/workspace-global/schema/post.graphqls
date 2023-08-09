@@ -1,0 +1,15 @@
+type Post @shareable {
+  id: ID!
+  title: String!
+  # user: User
+}
+
+# Unused type
+type User {
+  id: ID!
+}
+
+# Unused type
+type User2 {
+  id: ID!
+}

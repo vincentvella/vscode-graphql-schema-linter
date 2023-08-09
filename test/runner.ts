@@ -8,11 +8,21 @@ async function main() {
     const extensionDevelopmentPath = path.resolve(__dirname, "../");
     const extensionTestsPath = path.resolve(__dirname, "./suite/index");
     const workspaceFolder = path.resolve(__dirname, "../../test/workspace");
+    const workspaceGlobal = path.resolve(__dirname, "../../test/workspace-global");
 
     await runTests({
       extensionDevelopmentPath,
       extensionTestsPath,
       launchArgs: [workspaceFolder, "--disable-extensions", "--user-data-dir", `${tmpdir()}`],
+      extensionTestsEnv: {
+        DEBUG_MODE: "true",
+      },
+    });
+
+    await runTests({
+      extensionDevelopmentPath,
+      extensionTestsPath,
+      launchArgs: [workspaceGlobal, "--disable-extensions", "--user-data-dir", `${tmpdir()}`],
       extensionTestsEnv: {
         DEBUG_MODE: "true",
       },
