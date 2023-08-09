@@ -1,6 +1,6 @@
 # Graphql Schema Linter for Gopuff
 
-This VSCode extension allows you to lint your GraphQL schema files using the [graphql-schema-linter](https://github.com/vincentvella/graphql-schema-linter) library directly within the editor. The extension is activated when the graphql-schema-linter library is installed in your currently open workspace.
+This VSCode extension allows you to lint your GraphQL schema files using the [graphql-schema-linter](https://github.com/gopuff/graphql-schema-linter) library directly within the editor. The extension is activated when the graphql-schema-linter library is installed in your currently open workspace.
 
 ![screenshot](assets/screenshot.png)
 
@@ -12,19 +12,23 @@ This VSCode extension allows you to lint your GraphQL schema files using the [gr
 
 ## Limitations
 
-Please note that this extension does not support real-time linting as you make changes to your schema files. Linting is only performed when you save your files. This limitation is due to the difficulty of handling multiple schema files in real-time.
+Please note that this extension does not support real-time linting as you make changes to your schema files. Linting is only performed on save.
 
-## Requirements
+## Installation
 
-To use this extension, you must meet the following requirements:
-
-- The graphql-schema-linter library must be installed in your currently open workspace. If you don't have it installed, you can install it as a dependency in your project:
+Local:
 
 ```
-npm install --save-dev graphql-schema-linter
+npm install --save-dev @gopuff/graphql-schema-linter
 ```
 
-- You must have the `schemaPaths` option configured in your graphql-schema-linter configuration file. This is necessary because the extension cannot determine whether a GraphQL file is a schema or a client query. See: https://github.com/vincentvella/graphql-schema-linter#configuration-file
+Global (non-node projects):
+
+```
+npm install -g @gopuff/graphql-schema-linter
+```
+
+> You must have the `schemaPaths` option configured in your graphql-schema-linter configuration file. This is necessary because the extension cannot determine whether a GraphQL file is a schema or a client query. See: https://github.com/gopuff/graphql-schema-linter#configuration-file
 
 ## Usage
 
@@ -34,8 +38,18 @@ Once the extension is installed and the graphql-schema-linter library is availab
 
 This extension does not require any configuration options. It automatically detects and uses the graphql-schema-linter library installed in your workspace.
 
+## Contributing
+
+Install dependencies: `npm i`
+
+Install global package: `npm i -g @gopuff/graphql-schema-linter`
+
+Run tests: `npm run test`
+
+Open a PR and I'll review
+
 ## Feedback and Support
 
 If you encounter any issues or have suggestions for improvements, please feel free to create an issue on the GitHub repository.
 
-We appreciate your feedback and support in making this extension better for everyone!
+I appreciate your feedback and support in making this extension better.
