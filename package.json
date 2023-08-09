@@ -5,7 +5,7 @@
   "publisher": "vincentvella",
   "author": "vincentvella",
   "license": "MIT",
-  "version": "1.0.11",
+  "version": "1.0.31",
   "engines": {
     "vscode": "^1.77.0"
   },
@@ -30,7 +30,17 @@
         "command": "vscode-graphql-schema-linter-gopuff.executeLint",
         "title": "Execute lint for GraphQL Schema"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "GraphQL Schema Linter for Gopuff",
+      "properties": {
+        "vscode-graphql-schema-linter-gopuff.global-npm-package-path": {
+          "type": "string",
+          "default": "",
+          "description": "Output from the command `npm root -g`"
+        }
+      }
+    }
   },
   "scripts": {
     "setup": "npm install && cd ./test/workspace && npm install",

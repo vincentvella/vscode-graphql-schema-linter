@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
-import globalDirs from "global-dirs";
+import { npm, yarn } from "global-dirs";
 import vscode from "vscode";
+import logger from "./logger";
 
 interface Installation {
   path: string;
@@ -31,17 +32,36 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
     }
   }
 
-  const yarnPath = path.join(globalDirs.yarn.packages, "@gopuff", "graphql-schema-linter");
-  const npmPath = path.join(globalDirs.npm.packages, "@gopuff", "graphql-schema-linter");
+  logger.debug("Could not find @gopuff/graphql-schema-linter in workspace folder.");
 
-  // Check if the package is installed globally
+  // Check if the installation path was specified via the settings
+  const globalNpmPackagePath = vscode.workspace
+    .getConfiguration("vscode-graphql-schema-linter-gopuff")
+    .get<string>("global-npm-package-path");
+  if (globalNpmPackagePath) {
+    logger.info(`Manually entered global npm packages path is being used: ${globalNpmPackagePath}`);
+    return {
+      path: globalNpmPackagePath,
+      location: "global",
+    };
+  }
+
+  const yarnPath = path.join(yarn.packages, "@gopuff", "graphql-schema-linter");
+  const npmPath = path.join(npm.packages, "@gopuff", "graphql-schema-linter");
+
+  // Check if the package is installed via yarn globally
+  logger.debug(`Checking yarn path: ${yarnPath}`);
   if (fs.existsSync(yarnPath)) {
     // package is installed with global yarn
     return {
       path: yarnPath,
       location: "global",
     };
-  } else if (fs.existsSync(npmPath)) {
+  }
+
+  // Check if the package is installed via yarn globally
+  logger.debug(`Checking npm path: ${npmPath}`);
+  if (fs.existsSync(npmPath)) {
     // package is installed with global npm
     return {
       path: npmPath,
