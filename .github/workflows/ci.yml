@@ -1,0 +1,28 @@
+name: Run CI
+# on: [push]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GOPUFF_TOKEN }}
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+      - name: Install Project Dependencies
+        run: npm i
+      - name: Install test packages
+        run: npm i
+        working-directory: ./test/workspace
+      - name: Install test-global packages
+        run: npm i
+        working-directory: ./test/workspace-globalS
+      - name: Install global package
+        run: npm i -g @gopuff/graphql-schema-linter
+      - name: Run Tests
+        run: npm run test
