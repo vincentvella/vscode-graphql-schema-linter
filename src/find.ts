@@ -4,6 +4,15 @@ import { npm, yarn } from "global-dirs";
 import vscode from "vscode";
 import logger from "./logger";
 
+const NOT_FOUND_MANUAL_ERROR = `
+Manually entered global npm package path is invalid. 
+Please check your settings. It should be the output of the "npm root -g" command.
+If you are using yarn, it should be the output of the "yarn global dir" command.
+
+If this seems to be correctly configured, attempt to reinstall the package.
+npm i -g @gopuff/graphql-schema-linter
+`;
+
 interface Installation {
   path: string;
   location: "local" | "global";
@@ -39,11 +48,20 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
     .getConfiguration("vscode-graphql-schema-linter-gopuff")
     .get<string>("global-npm-package-path");
   if (globalNpmPackagePath) {
-    logger.info(`Manually entered global npm packages path is being used: ${globalNpmPackagePath}`);
-    return {
-      path: globalNpmPackagePath,
-      location: "global",
-    };
+    const libPath = path.join(globalNpmPackagePath, "@gopuff", "graphql-schema-linter");
+    if (fs.existsSync(libPath)) {
+      logger.info(`Manually entered global npm packages path is being used: ${globalNpmPackagePath}`);
+      return {
+        path: libPath,
+        location: "global",
+      };
+    } else {
+      vscode.window.showErrorMessage(NOT_FOUND_MANUAL_ERROR, "Open Settings").then((value) => {
+        if (value === "Open Settings") {
+          vscode.commands.executeCommand("workbench.action.openSettings", "vscode-graphql-schema-linter-gopuff");
+        }
+      });
+    }
   }
 
   const yarnPath = path.join(yarn.packages, "@gopuff", "graphql-schema-linter");
