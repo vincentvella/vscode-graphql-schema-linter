@@ -1,8 +1,23 @@
 import fs from "fs";
 import path from "path";
+import compareVersions from "compare-versions";
 import { npm, yarn } from "global-dirs";
 import vscode from "vscode";
 import logger from "./logger";
+
+const RECOMMENDED_INSTALLATION_VERSION = "1.0.24";
+const UPGRADE_MESSAGE = `Your version of @gopuff/graphql-schema-linter is out of date. 
+Please run "npm i -g @gopuff/graphql-schema-linter" to update to the latest version.`;
+
+const checkVersion = (packageJsonPath: string) => {
+  // eslint-disable-next-line
+  const packageJson = require(packageJsonPath);
+  const parsedVersion = packageJson.version;
+  const status = compareVersions(parsedVersion, RECOMMENDED_INSTALLATION_VERSION);
+  if (status === -1) {
+    vscode.window.showWarningMessage(UPGRADE_MESSAGE);
+  }
+};
 
 const NOT_FOUND_MANUAL_ERROR = `
 Manually entered global npm package path is invalid. 
@@ -34,6 +49,7 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
     currentPath = path.dirname(currentPath);
     const libPath = path.join(currentPath, "node_modules", "@gopuff", "graphql-schema-linter");
     if (fs.existsSync(libPath)) {
+      checkVersion(path.join(libPath, "package.json"));
       return {
         path: libPath,
         location: "local",
@@ -50,6 +66,7 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
   if (globalNpmPackagePath) {
     const libPath = path.join(globalNpmPackagePath, "@gopuff", "graphql-schema-linter");
     if (fs.existsSync(libPath)) {
+      checkVersion(path.join(libPath, "package.json"));
       logger.info(`Manually entered global npm packages path is being used: ${globalNpmPackagePath}`);
       return {
         path: libPath,
@@ -71,6 +88,7 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
   logger.debug(`Checking yarn path: ${yarnPath}`);
   if (fs.existsSync(yarnPath)) {
     // package is installed with global yarn
+    checkVersion(path.join(yarnPath, "package.json"));
     return {
       path: yarnPath,
       location: "global",
@@ -81,6 +99,7 @@ export async function findInstallation(document: vscode.TextDocument): Promise<I
   logger.debug(`Checking npm path: ${npmPath}`);
   if (fs.existsSync(npmPath)) {
     // package is installed with global npm
+    checkVersion(path.join(npmPath, "package.json"));
     return {
       path: npmPath,
       location: "global",
