@@ -5,7 +5,7 @@ import { npm, yarn } from "global-dirs";
 import vscode from "vscode";
 import logger from "./logger";
 
-const RECOMMENDED_INSTALLATION_VERSION = "1.0.24";
+const RECOMMENDED_INSTALLATION_VERSION = "1.0.25";
 const UPGRADE_MESSAGE = `Your version of @gopuff/graphql-schema-linter is out of date. 
 Please run "npm i -g @gopuff/graphql-schema-linter" to update to the latest version.`;
 
@@ -13,6 +13,8 @@ const checkVersion = (packageJsonPath: string) => {
   // eslint-disable-next-line
   const packageJson = require(packageJsonPath);
   const parsedVersion = packageJson.version;
+  logger.debug(`Found @gopuff/graphql-schema-linter version: ${parsedVersion}`);
+  logger.debug(`Recommended @gopuff/graphql-schema-linter version: ${RECOMMENDED_INSTALLATION_VERSION}`);
   const status = compareVersions(parsedVersion, RECOMMENDED_INSTALLATION_VERSION);
   if (status === -1) {
     vscode.window.showWarningMessage(UPGRADE_MESSAGE);
